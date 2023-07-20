@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import satpy
 import sys
 import warnings
 from importlib.machinery import PathFinder
@@ -88,11 +87,10 @@ satpy_import_path = config.get("satpy_import_path", None)
 if satpy_import_path is not None:
     overwrite_import("satpy", satpy_import_path)
 
-
-# get satpy_config_path from config file
-satpy_config_path_yml = config.get("satpy_extra_config_path", None)
-if satpy_config_path_yml is not None:
-    satpy.config.set(config_path=satpy.config.get("config_path") + [satpy_config_path_yml])
+satpy_extra_readers_import_path = config.get("satpy_extra_readers_import_path", None)
+if satpy_extra_readers_import_path is not None:
+    sys.path.insert(0, satpy_extra_readers_import_path)
+    os.environ["SATPY_CONFIG_PATH"] = satpy_extra_readers_import_path
 
 
 def _map_str_to_image_display_mode(image_display_mode_str: str) -> ImageDisplayMode:
